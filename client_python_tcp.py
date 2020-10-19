@@ -1,5 +1,11 @@
+#https://www.afternerd.com/blog/python-string-contains/
+#https://www.freecodecamp.org/news/how-to-substring-a-string-in-python/
+#https://www.geeksforgeeks.org/reading-writing-text-files-python/
+#https://stackoverflow.com/questions/3432102/python-socket-connection-timeout
+
 import socket
 import sys
+import subprocess #might only need in server
 
 SERVER = input("Enter server name or IP address: ")
 
@@ -30,16 +36,37 @@ def send(msg):
     client.send(send_length)
     client.send(message)
     #print(client.recv(2048).decode(FORMAT))
+    #client.recv(2048).decode(FORMAT)
     
     #add ACK validation here
 
-#send("Hello world!")
-#input()
-#send("Hello Everyone!")
-#input()
-#send("Hello Tim!")
-message = input("Enter command: ")
-send(message)
 
-send(DISCONNECT_MESSAGE)
+message = input("Enter command: ")
+
+index = message.find(">")
+textFile = 'copy.txt'
+if index > 0:
+    send(message[0:index-1])
+    textFile = message[index+2:len(message)]
+
+else:
+    send(message)
+
+try:
+    client.settimeout(.5)
+    result = client.recv(2048).decode(FORMAT)
+except:
+    print("\nDid not receive response.")
+    sys.exit()
+    
+    
+
+file1 = open(textFile,"w")
+file1.writelines(result)
+file1.close()
+print("\nFile " + textFile + " saved.")
+
+#send(message)
+
+#send(DISCONNECT_MESSAGE)
 client.close()
