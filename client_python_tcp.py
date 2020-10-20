@@ -44,7 +44,7 @@ def send(msg):
 message = input("Enter command: ")
 
 index = message.find(">")
-textFile = 'copy.txt'
+textFile = 'writtenFileTCP.txt'
 if index > 0:
     send(message[0:index-1])
     textFile = message[index+2:len(message)]
