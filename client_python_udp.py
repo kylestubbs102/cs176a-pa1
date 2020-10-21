@@ -65,8 +65,6 @@ for i in range(3):
 modifiedMsg, serverADDR = client.recvfrom(2048)
 #print(modifiedMsg.decode(FORMAT))
 
-
-
 file1 = open(textFile,"w")
 file1.writelines(modifiedMsg.decode(FORMAT))
 file1.close()

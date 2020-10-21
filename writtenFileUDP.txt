@@ -1,5 +1,2 @@
-client_python_tcp.py
-client_python_udp.py
-server_python_tcp.py
-server_python_udp.py
-text.txt
+'asdf' is not recognized as an internal or external command,
+operable program or batch file.

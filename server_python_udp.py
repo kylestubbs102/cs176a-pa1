@@ -28,43 +28,44 @@ while connected: #maybe change to while true
         #    break
 
 
-
-
     msgLength, clientADDR = server.recvfrom(2048)
-    
-    server.setblocking(0)
-    try: 
-        #msg, clientADDR = ready[0][0].recvfrom(2048)
-        print("hi")
-        server.settimeout(.5)
+
+    #server.setblocking(0)
+    while True:
+        try: 
+            #msg, clientADDR = ready[0][0].recvfrom(2048)
+            print("hi")
+            server.settimeout(.5)
 
 
-        msg, clientADDR = server.recvfrom(2048)
-        print(int(msgLength.decode(FORMAT)))
-        print(len(msg.decode(FORMAT)))
-        if (int(msgLength.decode(FORMAT)) == len(msg.decode(FORMAT))):
-            print("hola")
-            server.sendto(ACK.encode(FORMAT), clientADDR)
+            msg, clientADDR = server.recvfrom(2048)
+            print(int(msgLength.decode(FORMAT)))
+            print(len(msg.decode(FORMAT)))
+            if (int(msgLength.decode(FORMAT)) == len(msg.decode(FORMAT))):
+                print("hola")
+                server.sendto(ACK.encode(FORMAT), clientADDR)
+                server.setblocking(1)
+                    
+        except socket.timeout:
+            print("Failed to receive instructions from the client.")
             server.setblocking(1)
-    except socket.timeout:
-        print("Failed to receive instructions from the client.")
-        server.setblocking(1)
-        continue
+            continue
 
     if msg:
         msg = msg.decode(FORMAT)
         tempMsg = [msg]
         cmd = tempMsg[0].split()
 
-        #process = subprocess.check_output(cmd, encoding='utf-8')
 
-        try:
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output, error = process.communicate()
-        except Exception as e:
-            print(str(e))
-            output = str(e).encode(FORMAT)
-            error = ''.encode(FORMAT)
+        #try:
+            #process = subprocess.check_output(cmd, encoding='utf-8')
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        #    print(process)
+        output, error = process.communicate()
+        #except Exception as e:
+            #print(str(e))
+            #output = str(e).encode(FORMAT)
+            #error = ''.encode(FORMAT)
 
 
         #FOR TESTING
