@@ -7,7 +7,7 @@ from subprocess import check_output
 #import time
 
 HEADER = 64
-PORT = 5556
+PORT = 5555
 #PORT = sys.argv[1]
 SERVER = ''
 ADDR = ('', int(PORT))
@@ -31,7 +31,6 @@ while True:
             
             if (int(msgLength.decode(FORMAT)) == len(msg.decode(FORMAT))):
                 server.sendto(ACK.encode(FORMAT), clientADDR)
-                #server.setblocking(0)
                 try:
                     ACKResentCounter += 1
                     server.settimeout(.5)  #Note: no clear instruction on this
@@ -42,36 +41,23 @@ while True:
       
         except socket.timeout:
             print("Failed to receive instructions from the client.")
-            #server.setblocking(1)
             failed = True
             break
 
     
     if msg and not failed and ACKResentCounter < 4:
         msg = msg.decode(FORMAT)
-        tempMsg = [msg]
-        cmd = tempMsg[0].split()
-
         try:
-            #process = subprocess.check_output(cmd, encoding='utf-8')
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            output, error = process.communicate()
+            cp = subprocess.run(msg, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            finalMessage = (cp.stdout + cp.stderr).encode(FORMAT)
+        except FileNotFoundError as e:
+            finalMessage = str(e).encode(FORMAT)
 
-        except Exception as e:
-            output = str(e).encode(FORMAT)
-            error = ''.encode(FORMAT)
-
-        finalMessage = output + error
-        print("final message length: ", len(finalMessage))
-        print("bytes of finalMessage: ", sys.getsizeof(finalMessage))
         server.sendto(str(len(finalMessage)).encode(FORMAT), clientADDR)
 
 
         substringIndex = 0
-        #remainingMessageLength = len(finalMessage)
-
         ACKResentCounter = 0
-        #while remainingMessageLength > 0: 
         while 479*substringIndex < len(finalMessage):
             startingIndex = (479)*substringIndex  #512-33 = 479
             endIndex = (479)*(substringIndex+1)
@@ -79,7 +65,7 @@ while True:
             server.sendto(messageChunk, clientADDR)
 
             try:
-                server.settimeout(1) #change to 1
+                server.settimeout(1) #No clear instruction here so using 1 second like before
                 ACKMessage, clientADDR = server.recvfrom(2048)
                 ACKResentCounter = 0
             except:
@@ -91,7 +77,3 @@ while True:
                     continue
 
             substringIndex += 1
-            print("messageChunk length: ", len((messageChunk)))
-            print("messageChunk bytes: ", sys.getsizeof(messageChunk))     #TOMORROW WORK ON SENDING ACK TO CLIENT, 3 TIMES
-            #remainingMessageLength -= len(finalMessage[startingIndex:endIndex])
-            #print("remainingMessageLength: ", remainingMessageLength)
