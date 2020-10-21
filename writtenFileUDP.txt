@@ -1,2 +1,18 @@
-'asdf' is not recognized as an internal or external command,
-operable program or batch file.
+ Volume in drive C is Acer
+ Volume Serial Number is B03E-56DB
+
+ Directory of C:\Users\Kyle\Desktop\csprojects\cs176a\cs176a-pa1
+
+10/20/2020  03:36 PM    <DIR>          .
+10/20/2020  03:36 PM    <DIR>          ..
+10/20/2020  03:36 PM            12,288 .client_python_udp.py.swp
+10/20/2020  03:36 PM               301 .gitignore
+10/20/2020  03:36 PM            12,288 .server_python_udp.py.swp
+10/20/2020  03:36 PM             1,726 client_python_tcp.py
+10/20/2020  08:38 PM             1,713 client_python_udp.py
+10/20/2020  03:36 PM             1,783 server_python_tcp.py
+10/20/2020  08:41 PM             2,250 server_python_udp.py
+10/20/2020  03:36 PM                49 text.txt
+10/20/2020  08:38 PM               872 writtenFileUDP.txt
+               9 File(s)         33,270 bytes
+               2 Dir(s)  593,128,685,568 bytes free
