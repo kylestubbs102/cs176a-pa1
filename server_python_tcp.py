@@ -22,7 +22,6 @@ server.bind(ADDR)
 
 def handle_client(conn, addr): #allows for multiple clients to be connected
 
-    #while True:
     msg = conn.recv(BUFFER_SIZE).decode(FORMAT)
 
     try:        #turns the output or error message into a byte string
@@ -31,12 +30,7 @@ def handle_client(conn, addr): #allows for multiple clients to be connected
     except FileNotFoundError as e:
         finalMessage = str(e).encode(FORMAT)
 
-    #try:
     conn.send(finalMessage)
-            #break
-        #except:
-            #continue
-
     conn.close()
 
 def start():
